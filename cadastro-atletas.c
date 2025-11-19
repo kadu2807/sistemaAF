@@ -53,7 +53,7 @@ void cadastrar(FILE *arq) {
     printf("Posicao: ");
     ler_string(j.posicao, sizeof(j.posicao));
 
-    printf("Número da camisa: ");
+    printf("Numero da camisa: ");
     scanf("%d", &j.camisa);
     limpaBuffer();
 
@@ -95,16 +95,16 @@ void consultar(FILE *arq) {
 
     printf("\n=== JOGADOR %d ===\n", pos);
     printf("Nome: %s\n", j.nome);
-    printf("Posição: %s\n", j.posicao);
+    printf("Posicao: %s\n", j.posicao);
     printf("Camisa: %d\n", j.camisa);
     printf("Idade: %d anos\n", j.idade);
 }
 
 
 void gerarArquivo(FILE *arq) {
-    FILE *txt = fopen("lista_jogadores.txt", "w");
+    FILE *txt = fopen("C:\\jogadores\\lista_jogadores.txt", "w");
     if (!txt) {
-        printf("Erro ao criar arquivo de saída.\n");
+        printf("Erro ao criar o arquivo em C:\\jogadores\\\n");
         return;
     }
 
@@ -124,14 +124,14 @@ void gerarArquivo(FILE *arq) {
         fread(&j, sizeof(Jogador), 1, arq);
         fprintf(txt, "Jogador %d:\n", i + 1);
         fprintf(txt, "Nome: %s\n", j.nome);
-        fprintf(txt, "Posicao: %s\n", j.posicao);
+        fprintf(txt, "Posição: %s\n", j.posicao);
         fprintf(txt, "Camisa: %d\n", j.camisa);
         fprintf(txt, "Idade: %d\n\n", j.idade);
     }
 
     fclose(txt);
 
-    printf("\nArquivo 'lista_jogadores.txt' gerado com sucesso!\n");
+    printf("\nArquivo gerado em: C:\\jogadores\\lista_jogadores.txt\n");
 }
 
 
