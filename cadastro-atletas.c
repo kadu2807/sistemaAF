@@ -80,13 +80,13 @@ void consultar(FILE *arq) {
     int pos;
     Jogador j;
 
-    printf("\nInforme o índice do jogador: ");
+    printf("\nInforme o indice do jogador: ");
     scanf("%d", &pos);
     limpaBuffer();
 
     int total = tamanho(arq);
     if (pos <= 0 || pos > total) {
-        printf("Índice inválido.\n");
+        printf("Indice invalido.\n");
         return;
     }
 
@@ -134,6 +134,49 @@ void gerarArquivo(FILE *arq) {
     printf("\nArquivo gerado em: C:\\jogadores\\lista_jogadores.txt\n");
 }
 
+void excluirJogador(FILE *arq) {
+    int pos;
+    printf("\nInforme o indice do jogador a ser excluido: ");
+    scanf("%d", &pos);
+    limpaBuffer();
+
+    int total = tamanho(arq);
+    if (pos <= 0 || pos > total) {
+        printf("Indice invalido.\n");
+        return;
+    }
+
+    FILE *temp = fopen("temp.dat", "w+b");
+    if (!temp) {
+        printf("Erro ao criar arquivo temporario.\n");
+        return;
+    }
+
+    Jogador j;
+    fseek(arq, 0, SEEK_SET);
+
+    for (int i = 0; i < total; i++) {
+        fread(&j, sizeof(Jogador), 1, arq);
+        if (i != pos - 1) {
+            fwrite(&j, sizeof(Jogador), 1, temp);
+        }
+    }
+
+    fclose(arq);
+    fclose(temp);
+
+    remove("jogadores.dat");
+    rename("temp.dat", "jogadores.dat");
+
+    arq = fopen("jogadores.dat", "r+b");
+    if (!arq) {
+        printf("Erro ao reabrir arquivo principal.\n");
+        return;
+    }
+
+    printf("Jogador excluído com sucesso.\n");
+}
+
 
 int main(void) {
     FILE *arq = fopen("jogadores.dat", "r+b");
@@ -149,7 +192,8 @@ int main(void) {
         printf("\n1 - Cadastrar Jogador\n");
         printf("2 - Consultar Jogador\n");
         printf("3 - Gerar arquivo de jogadores\n");
-        printf("4 - Sair\n");
+        printf("4 - Excluir jogador\n");        
+        printf("5 - Sair\n");
         printf("\n=========================================\n");
         printf("Total: %d jogadores cadastrados\n", tamanho(arq));
         printf("Opcao: ");
@@ -158,14 +202,25 @@ int main(void) {
         limpaBuffer();
 
         switch (op) {
-            case 1: cadastrar(arq); break;
-            case 2: consultar(arq); break;
-            case 3: gerarArquivo(arq); break;
-            case 4: printf("Saindo...\n"); break;
+            case 1: cadastrar(arq);
+            break;
+
+            case 2: consultar(arq); 
+            break;
+
+            case 3: gerarArquivo(arq); 
+            break;
+
+            case 4: excluirJogador(arq);
+            break;
+
+            case 5: printf("Saindo...\n");
+            break;
+
             default: printf("Opcao invalida!\n");
         }
 
-    } while (op != 4);
+    } while (op != 5);
 
     fclose(arq);
     return 0;
